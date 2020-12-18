@@ -12,10 +12,12 @@ const app = express();
 // do this before any other middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
-
 // body parser is now added into express as well
 // app.use(express.json())
 // app.use(express.urlencoded({ extended: false })); 
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // use match with any url pattern
 // whereas get, post and others match exact pattern

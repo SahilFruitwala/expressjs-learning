@@ -1,9 +1,10 @@
-const path = require("path");
 const router = require('express').Router();
+const path = require("path");
+const rootDir = require("../utils/path");
 
 router.get("/add-prod", (req, res, next) => {
   console.log("In Add Product Middleware!");
-  res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
+  res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 });
 
 router.post("/add-prod", (req, res, next) => {
