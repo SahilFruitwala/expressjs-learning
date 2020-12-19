@@ -1,16 +1,24 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const path = require("path");
-const rootDir = require("../utils/path");
 
-router.get("/add-prod", (req, res, next) => {
+const rootDir = require("../utils/path");
+const products = [];
+
+router.get("/add-product", (req, res, next) => {
   console.log("In Add Product Middleware!");
-  res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
+  res.render("add-product", {
+    docTitle: "Add Product",
+    path: "/admin/add-product",
+    formCSS: true
+  });
+  // res.sendFile(path.join(rootDir, "views", "add-product.html"));
 });
 
-router.post("/add-prod", (req, res, next) => {
+router.post("/add-product", (req, res, next) => {
   console.log("In Show Product!");
-  console.log(req.body);
+  products.push({ title: req.body.title });
   res.redirect("/");
 });
 
-module.exports = router;
+exports.routes = router;
+exports.products = products;
