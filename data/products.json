@@ -1,1 +1,14 @@
-[{"title":"a"},{"title":"aaa"},{"title":"aaa"},{"title":"aaaaaa"},{"title":"as"},{"title":"aaa"}]
+[
+    {
+        "title": "asa",
+        "imageUrl": "https://cdn.cjr.org/wp-content/uploads/2017/04/book-pages.jpeg",
+        "description": "xsacasasc",
+        "price": "11"
+    },
+    {
+        "title": "11",
+        "imageUrl": "https://cdn.cjr.org/wp-content/uploads/2017/04/book-pages.jpeg",
+        "description": "11",
+        "price": "11"
+    }
+]
