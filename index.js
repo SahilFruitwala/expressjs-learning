@@ -5,6 +5,7 @@ const path = require("path");
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
 const errorController = require("./controllers/error");
+const db = require("./utils/database");
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -14,7 +15,7 @@ app.set("view engine", "ejs");
 app.set("views", "views"); // set location of views folder(2nd arg)
 
 // body parser is now added into express as well
-app.use(express.json())
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, "public")));
