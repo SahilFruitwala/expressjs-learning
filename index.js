@@ -5,7 +5,7 @@ const path = require("path");
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
 const errorController = require("./controllers/error");
-const db = require("./utils/database");
+const sequelize = require("./utils/database");
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -27,4 +27,10 @@ app.use("/admin", adminRoute);
 
 app.use(errorController.get404);
 
-app.listen(PORT);
+sequelize
+  .sync()
+  .then((result) => {
+    // console.log(result);
+    app.listen(PORT);
+  })
+  .catch((err) => console.log(err));
