@@ -2,20 +2,31 @@ require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
 
 const pass = process.env.MongoPassword;
+let _db;
 
 const mongoConnect = (callback) => {
   MongoClient.connect(
-    `mongodb+srv://root:${pass}@express-learning.pgj2f.mongodb.net/test?retryWrites=true&w=majority`,
+    `mongodb+srv://toor:${pass}@express-learning.pgj2f.mongodb.net/ecommerce?retryWrites=true&w=majority`,
     { useUnifiedTopology: true },
     (err, client) => {
       if (err) {
         console.log(err);
+        throw err;
       } else {
         console.log("Connection Succed!");
+        _db = client.db();
         callback(client);
       }
     }
   );
 };
 
-module.exports = mongoConnect;
+const getDb = () => {
+  if(_db) {
+    return _db
+  }
+  throw 'No database found!';
+}
+
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;

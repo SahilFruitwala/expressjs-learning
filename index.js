@@ -6,7 +6,7 @@ const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
 const errorController = require("./controllers/error");
 
-const mongoConnect = require("./utils/database");
+const mongoConnect = require("./utils/database").mongoConnect;
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -27,7 +27,6 @@ app.use("/admin", adminRoute);
 
 app.use(errorController.get404);
 
-mongoConnect((result) => {
-  console.log(result);
+mongoConnect(() => {
   app.listen(PORT);
 });
