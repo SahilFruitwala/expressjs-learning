@@ -1,14 +1,21 @@
-const Sequelize = require("sequelize");
 require("dotenv").config();
+const MongoClient = require("mongodb").MongoClient;
 
-const sequelize = new Sequelize(
-  process.env.DBName,
-  process.env.DBUser,
-  process.env.DBPassword,
-  {
-    dialect: "mysql",
-    host: process.env.DBHost,
-  }
-);
+const pass = process.env.MongoPassword;
 
-module.exports = sequelize;
+const mongoConnect = (callback) => {
+  MongoClient.connect(
+    `mongodb+srv://root:${pass}@express-learning.pgj2f.mongodb.net/test?retryWrites=true&w=majority`,
+    { useUnifiedTopology: true },
+    (err, client) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Connection Succed!");
+        callback(client);
+      }
+    }
+  );
+};
+
+module.exports = mongoConnect;
