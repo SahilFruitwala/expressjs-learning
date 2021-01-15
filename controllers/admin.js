@@ -29,12 +29,19 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
   const price = req.body.price;
 
-  const product = new Product(title, price, imageUrl, description);
+  const product = new Product(
+    title,
+    price,
+    imageUrl,
+    description,
+    null,
+    req.user._id
+  );
   product
     .save()
     .then((result) => {
       console.log(result);
-      res.redirect("/admin/add-product");
+      res.redirect("/admin/products");
     })
     .catch((err) => {
       console.log(err);
