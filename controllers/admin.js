@@ -2,8 +2,10 @@ const Product = require("../models/products");
 
 exports.getProducts = (req, res, next) => {
   console.log("Products page of admin...");
-  Product.fetchAll()
+  Product.find()
+    .populate('userId')
     .then((products) => {
+      console.log(products);
       res.render("admin/products", {
         pageTitle: "Admin Products",
         products: products,
@@ -28,15 +30,15 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
   const price = req.body.price;
+  const userId = req.user._id;
 
-  const product = new Product(
+  const product = new Product({
     title,
     price,
     imageUrl,
     description,
-    null,
-    req.user._id
-  );
+    userId,
+  });
   product
     .save()
     .then((result) => {
@@ -81,9 +83,14 @@ exports.postEditProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  const product = new Product(title, price, imageUrl, description, productId);
-  product
-    .save()
+  Product.findById(productId)
+    .then((product) => {
+      product.title = title;
+      product.imageUrl = imageUrl;
+      product.price = price;
+      product.description = description;
+      return product.save();
+    })
     .then((result) => {
       res.redirect("/admin/products");
     })
@@ -93,7 +100,7 @@ exports.postEditProduct = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
   console.log("Delete Products(POST) page of admin...");
   const productId = req.body.productId;
-  Product.deleteById(productId)
+  Product.findByIdAndRemove(productId)
     .then((result) => {
       res.redirect("/admin/products");
     })
