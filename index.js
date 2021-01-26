@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
+const authRoute = require("./routes/auth");
 const errorController = require("./controllers/error");
 
 const User = require("./models/user");
@@ -37,6 +38,7 @@ app.use((req, res, next) => {
 // whereas get, post and others match exact pattern
 app.use("/admin", adminRoute);
 app.use(shopRoute);
+app.use(authRoute);
 
 app.use(errorController.get404);
 
