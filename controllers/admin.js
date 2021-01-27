@@ -3,13 +3,14 @@ const Product = require("../models/products");
 exports.getProducts = (req, res, next) => {
   console.log("Products page of admin...");
   Product.find()
-    .populate('userId')
+    .populate("userId")
     .then((products) => {
       console.log(products);
       res.render("admin/products", {
         pageTitle: "Admin Products",
         products: products,
         path: "/admin/products",
+        isAuthenticated: req.isAuthenticated,
       });
     })
     .catch((err) => console.log(err));
@@ -21,6 +22,7 @@ exports.getAddProduct = (req, res, next) => {
     pageTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
+    isAuthenticated: req.isAuthenticated,
   });
 };
 
@@ -69,6 +71,7 @@ exports.getEditProduct = (req, res, next) => {
         path: "/admin/edit-product",
         editing: editMode,
         product: product,
+        isAuthenticated: req.isAuthenticated,
       });
     })
     .catch((err) => console.log(err));
