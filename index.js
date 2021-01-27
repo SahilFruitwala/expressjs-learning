@@ -19,7 +19,7 @@ const URI = `mongodb+srv://toor:${PASS}@express-learning.pgj2f.mongodb.net/ecomm
 const app = express();
 const store = new MongoDBStore({
   uri: URI,
-  collection: 'sessions'
+  collection: "sessions",
 });
 
 // ! ejs
@@ -35,19 +35,21 @@ app.use(
     secret: "secret of my shop",
     resave: false,
     saveUninitialized: false,
-    store: store
+    store: store,
   })
 );
 
 app.use((req, res, next) => {
-  User.findById("6008a0647c2efe342c510643")
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  if (req.session.user) {
+    User.findById(req.session.user._id)
+      .then((user) => {
+        req.user = user;
+        next();
+      })
+      .catch((err) => console.log(err));
+  } else {
+    next();
+  }
 });
 
 // use match with any url pattern
