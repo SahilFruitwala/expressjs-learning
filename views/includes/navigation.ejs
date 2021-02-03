@@ -43,9 +43,15 @@
           >Login</a
         >
       </li>
+      <li class="main-header__item">
+        <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup"
+          >Signup</a
+        >
+      </li>
       <% } else { %>
       <li class="main-header__item">
         <form action="/logout" method="POST">
+          <input type="hidden" value="<%= csrfToken %>" name="_csrf">
           <button type="submit">Logout</button>
         </form>
       </li>
@@ -67,6 +73,7 @@
     <li class="mobile-nav__item">
       <a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart">Cart</a>
     </li>
+    <% if (isAuthenticated) { %>
     <li class="mobile-nav__item">
       <a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders"
         >Orders</a
@@ -86,5 +93,6 @@
         >Admin Products
       </a>
     </li>
+    <% } %>
   </ul>
 </nav>

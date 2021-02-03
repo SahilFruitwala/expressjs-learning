@@ -9,7 +9,6 @@ exports.getIndex = (req, res, next) => {
         pageTitle: "Shop",
         products: products,
         path: "/",
-        isAuthenticated: req.session.isAuthenticated,
       });
     })
     .catch((err) => console.log(err));
@@ -23,7 +22,6 @@ exports.getProducts = (req, res, next) => {
         pageTitle: "All Products",
         products: products,
         path: "/products",
-        isAuthenticated: req.session.isAuthenticated,
       });
     })
     .catch((err) => console.log(err));
@@ -38,7 +36,6 @@ exports.getProduct = (req, res, next) => {
         pageTitle: product.title,
         product: product,
         path: "/products",
-        isAuthenticated: req.session.isAuthenticated,
       });
     })
     .catch((err) => console.log(err));
@@ -55,7 +52,6 @@ exports.getCart = (req, res, next) => {
         pageTitle: "Your Cart",
         products: user.cart.items,
         path: "/cart",
-        isAuthenticated: req.session.isAuthenticated,
       });
     })
     .catch((err) => console.log(err));
@@ -96,7 +92,7 @@ exports.postOrders = (req, res, next) => {
         return { quantity: i.quantity, product: { ...i.productId._doc } };
       });
       const order = new Order({
-        user: { name: req.user.name, userId: req.user._id },
+        user: { email: req.user.email, userId: req.user._id },
         products: products,
       });
       return order.save();
@@ -118,7 +114,6 @@ exports.getOrders = (req, res, next) => {
         pageTitle: "My Orders",
         path: "/orders",
         orders: orders,
-        isAuthenticated: req.session.isAuthenticated,
       });
     })
     .catch((err) => console.log(err));
