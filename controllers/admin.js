@@ -2,7 +2,7 @@ const Product = require("../models/products");
 
 exports.getProducts = (req, res, next) => {
   console.log("Products page of admin...");
-  Product.find()
+  Product.find({ userId: req.user._id })
     .populate("userId")
     .then((products) => {
       console.log(products);
@@ -17,7 +17,6 @@ exports.getProducts = (req, res, next) => {
 
 exports.getAddProduct = (req, res, next) => {
   console.log("Add Products(GET) page of admin...");
-
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
@@ -86,14 +85,16 @@ exports.postEditProduct = (req, res, next) => {
 
   Product.findById(productId)
     .then((product) => {
+      if (product.userId.toString() != req.user._id.toString()) {
+        return res.redirect("/");
+      }
       product.title = title;
       product.imageUrl = imageUrl;
       product.price = price;
       product.description = description;
-      return product.save();
-    })
-    .then((result) => {
-      res.redirect("/admin/products");
+      return product.save().then((result) => {
+        res.redirect("/admin/products");
+      });
     })
     .catch((err) => console.log(err));
 };
@@ -101,7 +102,7 @@ exports.postEditProduct = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
   console.log("Delete Products(POST) page of admin...");
   const productId = req.body.productId;
-  Product.findByIdAndRemove(productId)
+  Product.deleteOne({ _id: productId, userId: req.user._id })
     .then((result) => {
       res.redirect("/admin/products");
     })
