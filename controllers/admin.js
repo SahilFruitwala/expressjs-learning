@@ -14,7 +14,11 @@ exports.getProducts = (req, res, next) => {
         path: "/admin/products",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error while loading Add Product page!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getAddProduct = (req, res, next) => {
@@ -69,7 +73,23 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect("/admin/products");
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error("Creating product Failed!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+      // return res.status(500).render("admin/edit-product", {
+      //   pageTitle: "Add Product",
+      //   path: "/admin/add-product",
+      //   editing: false,
+      //   hasError: true,
+      //   errorMessage: 'Database operation failed!',
+      //   product: {
+      //     title,
+      //     imageUrl,
+      //     description,
+      //     price,
+      //   },
+      //   validationError: [],
+      // });
     });
 };
 
@@ -97,7 +117,11 @@ exports.getEditProduct = (req, res, next) => {
         validationError: [],
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error while loading Edit Product page!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -141,7 +165,11 @@ exports.postEditProduct = (req, res, next) => {
         res.redirect("/admin/products");
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Editing product failed!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postDeleteProduct = (req, res, next) => {
@@ -151,5 +179,9 @@ exports.postDeleteProduct = (req, res, next) => {
     .then((result) => {
       res.redirect("/admin/products");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Deleting product failed!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };

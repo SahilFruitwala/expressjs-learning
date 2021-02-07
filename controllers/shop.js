@@ -11,7 +11,11 @@ exports.getIndex = (req, res, next) => {
         path: "/",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error in loading index page!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getProducts = (req, res, next) => {
@@ -24,7 +28,11 @@ exports.getProducts = (req, res, next) => {
         path: "/products",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error in loading Products page!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getProduct = (req, res, next) => {
@@ -38,7 +46,11 @@ exports.getProduct = (req, res, next) => {
         path: "/products",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error in loading single product page!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getCart = (req, res, next) => {
@@ -54,7 +66,11 @@ exports.getCart = (req, res, next) => {
         path: "/cart",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error in loading cart!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postCart = (req, res, next) => {
@@ -68,7 +84,11 @@ exports.postCart = (req, res, next) => {
       console.log(result);
       res.redirect("/products");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error in post cart!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postDeleteCartItem = (req, res, next) => {
@@ -79,7 +99,11 @@ exports.postDeleteCartItem = (req, res, next) => {
     .then((result) => {
       res.redirect("/cart");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error in delete cart!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postOrders = (req, res, next) => {
@@ -103,7 +127,11 @@ exports.postOrders = (req, res, next) => {
     .then((result) => {
       res.redirect("/cart");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error in ordering!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getOrders = (req, res, next) => {
@@ -116,5 +144,9 @@ exports.getOrders = (req, res, next) => {
         orders: orders,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error("Error in loading order page!\n", err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
