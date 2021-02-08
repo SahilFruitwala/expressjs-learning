@@ -57,22 +57,26 @@ app.use(csrfProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
-  if (req.session.user) {
-    User.findById(req.session.user._id)
-      .then((user) => {
-        req.user = user;
-        next();
-      })
-      .catch((err) => console.log(err));
-  } else {
-    next();
-  }
-});
-
-app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isAuthenticated;
   res.locals.csrfToken = req.csrfToken();
   next();
+});
+
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
+    .then((user) => {
+      if (!user) {
+        return next();
+      }
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      next(new Error(err));
+    });
 });
 
 // use match with any url pattern
@@ -80,7 +84,17 @@ app.use((req, res, next) => {
 app.use("/admin", adminRoute);
 app.use(shopRoute);
 app.use(authRoute);
+
+app.use("/500", errorController.get500);
 app.use(errorController.get404);
+
+app.use((error, req, res, next) => {
+  res.status(500).render("errors/500", {
+    pageTitle: "Error!",
+    path: "/500",
+  });
+  // res.redirect("/500");
+});
 
 mongoose
   .connect(URI)
