@@ -7,6 +7,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
+const multer = require("multer");
 
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
@@ -26,12 +27,21 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.filename + "-" + file.originalname);
+  },
+});
 
 // ! ejs
 app.set("view engine", "ejs");
 app.set("views", "views"); // set location of views folder(2nd arg)
 
 // body parser is now added into express as well
+app.use(multer({ storage: fileStorage }).single("image"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
