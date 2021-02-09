@@ -27,24 +27,28 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.filename + "-" + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "images");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, new Date().toISOString() + "-" + file.originalname);
+//   },
+// });
+
+// const upload = multer({ storage: storage });
 
 // ! ejs
 app.set("view engine", "ejs");
 app.set("views", "views"); // set location of views folder(2nd arg)
 
 // body parser is now added into express as well
-app.use(multer({ storage: fileStorage }).single("image"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(multer({ dest: "images" }).single("image"));
+// app.use(upload.single("image"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   session({
     secret: "secret of my shop",

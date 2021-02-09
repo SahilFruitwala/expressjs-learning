@@ -5,6 +5,7 @@ const isAuth = require("../middleware/is-auth");
 
 const adminController = require("../controllers/admin");
 
+
 //  /admin/add-product => GET
 router.get("/add-product", isAuth, adminController.getAddProduct);
 
@@ -14,7 +15,6 @@ router.post(
   isAuth,
   [
     body("title").isString().isLength({ min: 3 }).trim(),
-    body("imageUrl").isURL().trim(),
     body("price").isFloat(),
     body("description").isLength({ min: 8 }).trim(),
   ],
@@ -33,7 +33,6 @@ router.post(
   isAuth,
   [
     body("title").isString().isLength({ min: 3 }).trim(),
-    body("imageUrl").isURL().trim(),
     body("price").isFloat(),
     body("description").isLength({ min: 8 }).trim(),
   ],
