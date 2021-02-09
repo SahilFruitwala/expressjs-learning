@@ -27,16 +27,28 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "images");
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, new Date().toISOString() + "-" + file.originalname);
-//   },
-// });
 
-// const upload = multer({ storage: storage });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now().toString() + "-" + file.originalname);
+  },
+});
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 // ! ejs
 app.set("view engine", "ejs");
@@ -45,8 +57,12 @@ app.set("views", "views"); // set location of views folder(2nd arg)
 // body parser is now added into express as well
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(multer({ dest: "images" }).single("image"));
-// app.use(upload.single("image"));
+// app.use(
+//   multer({
+//     dest: "images",
+//   }).single("image")
+// );
+app.use(upload.single("image"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
@@ -93,6 +109,7 @@ app.use("/500", errorController.get500);
 app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
+  console.log(error);
   res.status(500).render("errors/500", {
     pageTitle: "Error!",
     path: "/500",
