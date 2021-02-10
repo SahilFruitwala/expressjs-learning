@@ -209,9 +209,10 @@ exports.postEditProduct = (req, res, next) => {
     });
 };
 
-exports.postDeleteProduct = (req, res, next) => {
+exports.deleteProduct = (req, res, next) => {
   console.log("Delete Products(POST) page of admin...");
-  const productId = req.body.productId;
+
+  const productId = req.params.productId;
 
   Product.findById(productId)
     .then((product) => {
@@ -222,11 +223,13 @@ exports.postDeleteProduct = (req, res, next) => {
       return Product.deleteOne({ _id: productId, userId: req.user._id });
     })
     .then((result) => {
-      res.redirect("/admin/products");
+      res.status(200).json({
+        message: "Success!",
+      });
     })
     .catch((err) => {
-      const error = new Error("Deleting product failed!\n", err);
-      error.httpStatusCode = 500;
-      return next(error);
+      res.status(200).json({
+        message: "Failed!",
+      });
     });
 };
